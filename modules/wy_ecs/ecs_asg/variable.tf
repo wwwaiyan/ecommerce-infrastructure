@@ -1,0 +1,11 @@
+variable "project_name" {}
+variable "env_prefix" {}
+variable "ecs_subnet_1" {}
+variable "ecs_subnet_2" {}
+variable "ecs_instance_profile_name" {}
+variable "ecs_sg" {}
+variable "ecs_cluster_name" {}
+variable "ecs_instance_type" {}
+variable "ecsasg_desired_capacity" {}
+variable "ecsasg_max_size" {}
+variable "ecsasg_min_size" {}
