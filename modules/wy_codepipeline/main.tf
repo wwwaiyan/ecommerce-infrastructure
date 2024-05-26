@@ -1,3 +1,4 @@
+data "aws_region" "current" {}
 module "cp_iam" {
   source            = "./cp_iam"
   cp_s3_bucket_arn  = module.cp_s3.cp_s3_bucket_arn
@@ -7,7 +8,6 @@ module "cp_s3" {
   source                   = "./cp_s3"
   codepipeline_bucket_name = var.codepipeline_bucket_name
 }
-data "aws_region" "current" {}
 resource "aws_codestarconnections_connection" "codestarconnections" {
   name          = "github-connection"
   provider_type = "GitHub"
@@ -45,10 +45,6 @@ resource "aws_codebuild_project" "codebuild_project" {
       name  = "CONTAINER_PORT"
       value = var.container_port
     }
-    environment_variable {
-      name  = "AWS_STORAGE_BUCKET_NAME"
-      value = var.s3_bucket
-    }
   }
 
   source {
@@ -78,7 +74,7 @@ resource "aws_codedeploy_deployment_group" "codedeploy_deployment_group" {
   blue_green_deployment_config {
     terminate_blue_instances_on_deployment_success {
       action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
+      termination_wait_time_in_minutes = 0
     }
 
     deployment_ready_option {

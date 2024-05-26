@@ -16,4 +16,3 @@ variable "ecr_repository_uri" {}
 variable "container_name" {}
 variable "container_port" {}
 variable "ecs_task_definition_arn" {}
-variable "s3_bucket" {}

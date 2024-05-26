@@ -18,7 +18,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability Zone"
   type        = list(string)
-  default     = ["us-west-2a", "us-west-2b"]
+  default     = ["ap-southeast-1a", "ap-southeast-1b"]
 }
 #public_subnet
 variable "public_subnet_cidr" {
@@ -115,7 +115,7 @@ variable "rds_sg_ingress_rules" {
     description = string
   }))
   default = [
-    { from_port = 5432, to_port = 5432, protocol = "tcp", cidr_blocks = "0.0.0.0/0", description = "postgresql" }
+    { from_port = 5432, to_port = 5432, protocol = "tcp", cidr_blocks = "10.90.0.0/16", description = "postgresql" }
   ]
 }
 #egress
@@ -190,7 +190,7 @@ variable "container_port" {
 }
 #codepipeline
 variable "codepipeline_bucket_name" {
-  default = "ecommerce-cp-25"
+  default = "ecommerce-cp-27"
 }
 variable "codebuild_project_name" {
   default = "ecommerce-codebuild-project"
@@ -212,5 +212,5 @@ variable "git_branch_name" {
 }
 #s3
 variable "bucket_name" {
-  default = "ecommerce-appdata-25"
+  default = "ecommerce-appdata-27"
 }

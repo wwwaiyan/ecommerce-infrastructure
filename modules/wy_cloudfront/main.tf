@@ -1,7 +1,3 @@
-resource "aws_cloudfront_origin_access_identity" "cloudfront_origin_access_identity" {
-  comment = "test OAI"
-}
-
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
     domain_name = var.alb_dns_name
@@ -15,10 +11,10 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "Example CloudFront Distribution"
-  default_root_object = "index.html"
+  enabled         = true
+  is_ipv6_enabled = true
+  comment         = "CloudFront Distribution"
+  # default_root_object = "index.html"
 
   default_cache_behavior {
     target_origin_id       = "ALBOrigin"
@@ -32,8 +28,10 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
       query_string = false
 
       cookies {
-        forward = "none"
+        forward = "all" # Make sure cookies are forwarded
       }
+
+      headers = ["Origin", "Referer"] # Forward necessary headers
     }
 
     min_ttl     = 0

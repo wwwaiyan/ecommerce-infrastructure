@@ -1,7 +1,9 @@
+data "aws_region" "current" {}
 module "ecs_iam" {
-  source       = "./ecs_iam"
-  project_name = var.project_name
-  env_prefix   = var.env_prefix
+  source                 = "./ecs_iam"
+  project_name           = var.project_name
+  env_prefix             = var.env_prefix
+  app_data_s3_bucket_arn = var.app_data_s3_bucket_arn
 }
 module "ecs_asg" {
   source                    = "./ecs_asg"
@@ -12,9 +14,9 @@ module "ecs_asg" {
   ecs_subnet_2              = var.ecs_subnet_2
   ecs_sg                    = module.ecs_sg.security_group_id
   ecs_cluster_name          = aws_ecs_cluster.ecs_cluster.name
-  ecs_instance_type         = "t2.medium"
+  ecs_instance_type         = "c5.xlarge"
   ecsasg_desired_capacity   = 1
-  ecsasg_max_size           = 5
+  ecsasg_max_size           = 7
   ecsasg_min_size           = 1
 }
 module "ecs_alb" {
@@ -119,11 +121,16 @@ data "template_file" "container_definition" {
   template = file("${path.module}/container_definitions/definition.json.tpl")
 
   vars = {
-    postgres_host     = var.postgres_host
-    postgres_user     = var.postgres_user
-    postgres_password = var.postgres_password
-    postgres_db       = var.postgres_db
-    postgres_port     = var.postgres_port
+    postgres_host      = var.postgres_host
+    postgres_user      = var.postgres_user
+    postgres_password  = var.postgres_password
+    postgres_db        = var.postgres_db
+    postgres_port      = var.postgres_port
+    ecr_repository_uri = var.ecr_repository_uri
+    app_data_s3_bucket = var.app_data_s3_bucket
+    log_group_name     = aws_cloudwatch_log_group.ecs_cw.name
+    aws_region         = data.aws_region.current.name
+    log_stream_prefix  = "ecs-log"
   }
 }
 
@@ -131,8 +138,8 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                   = "${var.env_prefix}-ecs-task-definition"
   requires_compatibilities = ["EC2"]
   network_mode             = "awsvpc"
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 1024
+  memory                   = 2048
   execution_role_arn       = module.ecs_iam.ecs_task_execution_role_arn
   task_role_arn            = module.ecs_iam.ecs_task_execution_role_arn
   container_definitions    = data.template_file.container_definition.rendered

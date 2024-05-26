@@ -9,7 +9,6 @@ module "vpc" {
   public_subnet_for_nat = var.public_subnet_for_nat
   azs                   = var.azs
 }
-
 module "rds" {
   source                = "./modules/wy_rds"
   project_name          = var.project_name
@@ -50,15 +49,18 @@ module "ecs" {
   ecs_alb_public_subnet_2 = module.vpc.public_subnet_ids[1]
   container_name          = var.container_name
   container_port          = var.container_port
-  postgres_host           = module.rds.rds.endpoint
+  postgres_host           = module.rds.rds.address
   postgres_user           = module.rds.rds.username
   postgres_password       = module.rds.rds.password
   postgres_db             = module.rds.rds.db_name
   postgres_port           = module.rds.rds.port
+  ecr_repository_uri      = module.ecr.ecr_repository_uri
   ecs_cluster_name        = var.ecs_cluster_name
   ecs_sg_name             = var.ecs_sg_name
   ecs_sg_ingress_rules    = var.ecs_sg_ingress_rules
   ecs_sg_egress_rules     = var.ecs_sg_egress_rules
+  app_data_s3_bucket      = module.s3.s3_bucket
+  app_data_s3_bucket_arn  = module.s3.s3_bucket_arn
 }
 module "codepipeline" {
   source                           = "./modules/wy_codepipeline"
@@ -80,7 +82,6 @@ module "codepipeline" {
   git_branch_name                  = var.git_branch_name
   ecr_repository_uri               = module.ecr.ecr_repository_uri
   ecs_task_definition_arn          = module.ecs.ecs_task_definition_arn
-  s3_bucket                        = module.s3.s3_bucket
 }
 module "s3" {
   source       = "./modules/wy_s3"

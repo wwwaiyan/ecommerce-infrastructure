@@ -19,6 +19,9 @@ variable "postgres_user" {}
 variable "postgres_password" {}
 variable "postgres_db" {}
 variable "postgres_port" {}
+variable "ecr_repository_uri" {}
+variable "app_data_s3_bucket" {}
+variable "app_data_s3_bucket_arn" {}
 variable "ecs_sg_name" {
   description = "Security Group Name"
   type        = string

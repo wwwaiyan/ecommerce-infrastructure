@@ -262,26 +262,27 @@ resource "aws_iam_policy" "codedeploy_policy" {
           "ecs:ListTasks",
           "ecs:UpdateService",
           "ecs:CreateTaskSet",
-          "ecs:DeleteTaskSet"
+          "ecs:DeleteTaskSet",
+          "ecs:UpdateServicePrimaryTaskSet"
         ],
         Resource = "*"
       },
-      # {
-      #   Effect = "Allow",
-      #   Action = [
-      #     "cloudwatch:DescribeAlarms",
-      #     "cloudwatch:PutMetricAlarm",
-      #     "cloudwatch:DeleteAlarms"
-      #   ],
-      #   Resource = "*"
-      # },
-      # {
-      #   Effect = "Allow",
-      #   Action = [
-      #     "sns:Publish"
-      #   ],
-      #   Resource = "*"
-      # },
+      {
+        Effect = "Allow",
+        Action = [
+          "cloudwatch:DescribeAlarms",
+          "cloudwatch:PutMetricAlarm",
+          "cloudwatch:DeleteAlarms"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sns:Publish"
+        ],
+        Resource = "*"
+      },
       {
         Effect = "Allow",
         Action = [

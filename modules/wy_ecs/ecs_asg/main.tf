@@ -8,7 +8,8 @@ output "ecs_optimized_ami_id" {
 resource "aws_launch_template" "ecs_launch_template" {
   name = "ecs-launch-template"
 
-  image_id      = data.aws_ssm_parameter.ecs_optimized_ami.value
+  image_id = data.aws_ssm_parameter.ecs_optimized_ami.value
+  # image_id      = "ami-0a1437bada9a738dc"
   instance_type = var.ecs_instance_type
 
   iam_instance_profile {
