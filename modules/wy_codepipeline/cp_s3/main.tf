@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = var.codepipeline_bucket_name
+  force_destroy = true
 }
 resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {
   bucket = aws_s3_bucket.codepipeline_bucket.id
