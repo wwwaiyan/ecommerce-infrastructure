@@ -3,6 +3,13 @@
 
 I have implemented Infrastructure as Code (IAC) using Terraform to define all AWS resources, including both the AWS infrastructure and the CI/CD pipeline.
 
+- Application source code repository:
+    
+    [https://github.com/wwwaiyan/django-ecommerce-store](https://github.com/wwwaiyan/django-ecommerce-store)  
+
+#### AWS infrastructure and  CI/CD pipeline.
+![](./images/aws-infrastructure.png)
+
 ```hcl
 module.cloudFront.aws_cloudfront_distribution.cloudfront_distribution
 module.codepipeline.data.aws_region.current
